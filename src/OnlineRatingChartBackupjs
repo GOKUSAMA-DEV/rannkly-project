@@ -1,0 +1,240 @@
+import React, { useState } from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+  LineChart,
+  Line,
+  Legend,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
+import "./styles/online_chart.scss";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+const COLORS = [
+  "#0088FE",
+  "#00C49F",
+  "#FFBB28",
+  "#FF8042",
+  "#A28AE5",
+  "#FF6384",
+  "#36A2EB",
+  "#FFCE56",
+];
+const data = [
+  { city: "Gaziabad", code: "430123", rating: 95.4, date: "2025-04-01" },
+  { city: "Noida", code: "201302", rating: 78.2, date: "2025-03-21" },
+  { city: "Delhi", code: "110034", rating: 65.1, date: "2025-02-15" },
+  { city: "Nagpur", code: "129012", rating: 91.8, date: "2025-01-10" },
+  { city: "Lucknow", code: "129012", rating: 74.3, date: "2024-12-20" },
+  { city: "Kanpur", code: "129012", rating: 82.6, date: "2024-11-11" },
+  { city: "Raipur", code: "129012", rating: 83.1, date: "2024-10-25" },
+  { city: "Kolkata", code: "129012", rating: 70.9, date: "2024-09-03" },
+];
+
+const CustomTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="overlay-text">
+        <p className="month-text">
+          <strong>Oct 2024</strong>
+        </p>
+        <p className="percent-val-text">{`${payload[0].value}%`}</p>
+      </div>
+    );
+  }
+  return null;
+};
+
+const pieData = data.map((item) => ({
+  name: item.city,
+  value: item.rating,
+}));
+
+const filterData = (range) => {
+  const now = new Date();
+
+  const filtered = data.filter((item) => {
+    const itemDate = new Date(item.date);
+
+    switch (range) {
+      case "Last 7 Days":
+        return itemDate >= new Date(new Date().setDate(now.getDate() - 7));
+      case "Last 30 Days":
+        return itemDate >= new Date(new Date().setDate(now.getDate() - 30));
+      case "Last 3 Months":
+        return itemDate >= new Date(new Date().setMonth(now.getMonth() - 3));
+      case "Yearly":
+        return (
+          itemDate >= new Date(new Date().setFullYear(now.getFullYear() - 1))
+        );
+      default:
+        return true;
+    }
+  });
+
+  return filtered;
+};
+
+const OnlineRatingChart = () => {
+  const [range, setRange] = useState("Last 30 Days");
+  // const filteredData = filterData(range);
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [startDate, endDate] = dateRange;
+
+  // const filteredData = data.filter((item) => {
+  //   const itemDate = new Date(item.date);
+  //   return (
+  //     (!startDate || itemDate >= startDate) && (!endDate || itemDate <= endDate)
+  //   );
+  // });
+  const uniqueCities = [...new Set(data.map((d) => d.city))];
+  const [selectedCities, setSelectedCities] = useState(uniqueCities);
+
+  const handleCityChange = (city) => {
+    if (selectedCities.includes(city)) {
+      setSelectedCities(selectedCities.filter((c) => c !== city));
+    } else {
+      setSelectedCities([...selectedCities, city]);
+    }
+  };
+
+  const filteredData = data.filter((d) => selectedCities.includes(d.city));
+  console.log(filteredData, "filterData filterData");
+  return (
+    <div className="parent-container">
+      <div className="inner-container">
+        <div className="flex justify-between items-center mb-4">
+          {/* <p className="main-title">
+            Online Rating Index
+          </p> */}
+          {/* <div className="flex gap-2 text-gray-500 text-sm">
+            <button className="text-purple-600 font-medium">Monthly</button>
+            <button>Quarterly</button>
+            <button>Yearly</button>
+          </div> */}
+        </div>
+        <h3>Filter by City</h3>
+        <div>
+          {uniqueCities.map((city) => (
+            <label key={city} style={{ marginRight: "1rem" }}>
+              <input
+                type="checkbox"
+                checked={selectedCities.includes(city)}
+                onChange={() => handleCityChange(city)}
+              />
+              {city}
+            </label>
+          ))}
+        </div>
+        <select value={range} onChange={(e) => setRange(e.target.value)}>
+          <option value="Last 7 Days">Last 7 Days</option>
+          <option value="Last 30 Days">Last 30 Days</option>
+          <option value="Last 3 Months">Last 3 Months</option>
+          <option value="Yearly">Yearly</option>
+        </select>
+        <DatePicker
+          selectsRange
+          startDate={startDate}
+          endDate={endDate}
+          onChange={(update) => {
+            setDateRange(update);
+          }}
+          isClearable
+          dateFormat="yyyy-MM-dd"
+        />
+        <ResponsiveContainer width="100%" height={350}>
+          <BarChart data={filteredData}>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+            <XAxis
+              dataKey="city"
+              tick={({ x, y, payload, index }) => {
+                const city = payload.value;
+                const code = filteredData[index].code;
+                return (
+                  <g transform={`translate(${x},${y})`}>
+                    <text textAnchor="middle" fill="#666" fontSize={14}>
+                      <tspan x={0} dy="1em">
+                        {city}
+                      </tspan>
+                      <tspan x={0} dy="1.2em" fill="#999" fontSize={10}>
+                        ({code})
+                      </tspan>
+                    </text>
+                  </g>
+                );
+              }}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Bar
+              dataKey="rating"
+              fill="#f4a261"
+              radius={[4, 4, 0, 0]}
+              barSize={16}
+            />
+          </BarChart>
+          {/* <LineChart width={700} height={400} data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="city"
+              tick={({ x, y, payload, index }) => {
+                const city = payload.value;
+                const code = data[index].code;
+                return (
+                  <g transform={`translate(${x},${y})`}>
+                    <text textAnchor="middle" fill="#666" fontSize={14}>
+                      <tspan x={0} dy="1em">
+                        {city}
+                      </tspan>
+                      <tspan x={0} dy="1.2em" fill="#999" fontSize={10}>
+                        ({code})
+                      </tspan>
+                    </text>
+                  </g>
+                );
+              }}
+            />
+            <Tooltip />
+            <Legend />
+            <Line
+              type="monotone"
+              dataKey="rating"
+              stroke="#8884d8"
+              activeDot={{ r: 8 }}
+            />
+          </LineChart> */}
+
+          {/* <PieChart width={500} height={400}>
+            <Pie
+              data={pieData}
+              cx="50%"
+              cy="50%"
+              outerRadius={120}
+              fill="#8884d8"
+              dataKey="value"
+              label={({ name, value }) => `${name} (${value}%)`}
+            >
+              {pieData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart> */}
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+};
+
+export default OnlineRatingChart;

@@ -1,0 +1,64 @@
+.nav-container {
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #e6e6e6;
+
+  .name-box {
+    width: 50%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    p {
+      color: #484849;
+      font-weight: 400;
+      font-size: 16px;
+      font-family: Open Sans;
+    }
+  }
+  .right-container {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.5rem;
+    align-items: center;
+
+    .com-icon {
+      height: 20px;
+      width: 20px;
+      object-fit: contain;
+    }
+    .profile-container {
+      display: flex;
+      justify-content: center;
+      gap: 0.7rem;
+      align-items: center;
+
+      .profile-image {
+        height: 35px;
+        width: 35px;
+        object-fit: contain;
+      }
+      .content-con {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+
+        .name-text {
+          font-size: 500;
+          font-size: 14px;
+          color: #1c1c1c;
+        }
+        .email-text {
+          font-size: 400;
+          font-size: 14px;
+          color: #1c1c1c;
+          color: #484849;
+        }
+      }
+    }
+  }
+}
