@@ -3,31 +3,31 @@ import {
   BarChart,
   Bar,
   XAxis,
-  YAxis,
+  // YAxis,
   Tooltip,
   ResponsiveContainer,
   CartesianGrid,
-  LineChart,
-  Line,
-  Legend,
-  PieChart,
-  Pie,
-  Cell,
+  // LineChart,
+  // Line,
+  // Legend,
+  // PieChart,
+  // Pie,
+  // Cell,
 } from "recharts";
 import "./styles/online_chart.scss";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const COLORS = [
-  "#0088FE",
-  "#00C49F",
-  "#FFBB28",
-  "#FF8042",
-  "#A28AE5",
-  "#FF6384",
-  "#36A2EB",
-  "#FFCE56",
-];
+// const COLORS = [
+//   "#0088FE",
+//   "#00C49F",
+//   "#FFBB28",
+//   "#FF8042",
+//   "#A28AE5",
+//   "#FF6384",
+//   "#36A2EB",
+//   "#FFCE56",
+// ];
 const data = [
   { city: "Gaziabad", code: "430123", rating: 95.4, date: "2025-04-01" },
   { city: "Noida", code: "201302", rating: 78.2, date: "2025-03-21" },

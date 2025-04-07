@@ -3,35 +3,35 @@ import {
   BarChart,
   Bar,
   XAxis,
-  YAxis,
+  // YAxis,
   Tooltip,
   ResponsiveContainer,
   CartesianGrid,
-  LineChart,
-  Line,
-  Legend,
-  PieChart,
-  Pie,
-  Cell,
+  // LineChart,
+  // Line,
+  // Legend,
+  // PieChart,
+  // Pie,
+  // Cell,
 } from "recharts";
 import "./styles/online_chart.scss";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+// import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import { useRef } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
-const COLORS = [
-  "#0088FE",
-  "#00C49F",
-  "#FFBB28",
-  "#FF8042",
-  "#A28AE5",
-  "#FF6384",
-  "#36A2EB",
-  "#FFCE56",
-];
+// const COLORS = [
+//   "#0088FE",
+//   "#00C49F",
+//   "#FFBB28",
+//   "#FF8042",
+//   "#A28AE5",
+//   "#FF6384",
+//   "#36A2EB",
+//   "#FFCE56",
+// ];
 const data = [
   { city: "Gaziabad", code: "430123", rating: 95.4, date: "2025-04-01" },
   { city: "Noida", code: "201302", rating: 78.2, date: "2025-03-21" },
@@ -57,35 +57,35 @@ const CustomTooltip = ({ active, payload }) => {
   return null;
 };
 
-const pieData = data.map((item) => ({
-  name: item.city,
-  value: item.rating,
-}));
+// const pieData = data.map((item) => ({
+//   name: item.city,
+//   value: item.rating,
+// }));
 
-const filterData = (range) => {
-  const now = new Date();
+// const filterData = (range) => {
+//   const now = new Date();
 
-  const filtered = data.filter((item) => {
-    const itemDate = new Date(item.date);
+//   const filtered = data.filter((item) => {
+//     const itemDate = new Date(item.date);
 
-    switch (range) {
-      case "Last 7 Days":
-        return itemDate >= new Date(new Date().setDate(now.getDate() - 7));
-      case "Last 30 Days":
-        return itemDate >= new Date(new Date().setDate(now.getDate() - 30));
-      case "Last 3 Months":
-        return itemDate >= new Date(new Date().setMonth(now.getMonth() - 3));
-      case "Yearly":
-        return (
-          itemDate >= new Date(new Date().setFullYear(now.getFullYear() - 1))
-        );
-      default:
-        return true;
-    }
-  });
+//     switch (range) {
+//       case "Last 7 Days":
+//         return itemDate >= new Date(new Date().setDate(now.getDate() - 7));
+//       case "Last 30 Days":
+//         return itemDate >= new Date(new Date().setDate(now.getDate() - 30));
+//       case "Last 3 Months":
+//         return itemDate >= new Date(new Date().setMonth(now.getMonth() - 3));
+//       case "Yearly":
+//         return (
+//           itemDate >= new Date(new Date().setFullYear(now.getFullYear() - 1))
+//         );
+//       default:
+//         return true;
+//     }
+//   });
 
-  return filtered;
-};
+//   return filtered;
+// };
 
 const OnlineRatingChart = () => {
   const chartRef = useRef();

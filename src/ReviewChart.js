@@ -2,7 +2,6 @@ import {
   BarChart,
   Bar,
   XAxis,
-  YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
@@ -75,19 +74,19 @@ const CustomTooltip = ({ active, payload, label }) => {
 
   return null;
 };
-const renderCustomXAxis = ({ x, y, payload }) => {
-  const { city, pincode } = data[payload.index];
-  return (
-    <g transform={`translate(${x},${y + 10})`}>
-      <text x={0} y={0} dy={10} textAnchor="middle" fill="#333" fontSize={9}>
-        {city}
-      </text>
-      <text x={0} y={15} dy={10} textAnchor="middle" fill="#888" fontSize={10}>
-        ({pincode})
-      </text>
-    </g>
-  );
-};
+// const renderCustomXAxis = ({ x, y, payload }) => {
+//   const { city, pincode } = data[payload.index];
+//   return (
+//     <g transform={`translate(${x},${y + 10})`}>
+//       <text x={0} y={0} dy={10} textAnchor="middle" fill="#333" fontSize={9}>
+//         {city}
+//       </text>
+//       <text x={0} y={15} dy={10} textAnchor="middle" fill="#888" fontSize={10}>
+//         ({pincode})
+//       </text>
+//     </g>
+//   );
+// };
 
 export default function ReviewChart() {
   return (
