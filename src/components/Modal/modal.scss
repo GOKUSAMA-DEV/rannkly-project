@@ -1,0 +1,70 @@
+.main-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  .back-container {
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #000000;
+    opacity: 0.5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999999999999999999;
+  }
+  .modal-parent-container {
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999999999999999999;
+
+    .cros-row {
+      width: 62%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      .cross-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        background-color: #949494;
+        padding: 0.5rem;
+
+        .cross-image {
+          height: 20px;
+          width: 20px;
+          object-fit: contain;
+          cursor: pointer;
+        }
+      }
+    }
+    .modal-inner-container {
+      min-height: 450px;
+      min-width: 745px;
+      display: flex;
+      background-color: #fdfeff;
+      border: 1px solid #e6e6e6;
+      border-radius: 14px;
+      padding: 1rem;
+    }
+  }
+}

@@ -8,3 +8,10 @@
 .recharts-responsive-container {
   width: 127%;
 }
+input::placeholder {
+  color: #999999;
+  font-size: 12px;
+}
+.css-b62m3t-container {
+  width: 100% !important;
+}

@@ -4,6 +4,9 @@
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid #e6e6e6;
+  position: fixed;
+  top: 0;
+  position: relative;
 
   .name-box {
     width: 50%;

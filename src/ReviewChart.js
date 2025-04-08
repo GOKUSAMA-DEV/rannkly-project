@@ -6,184 +6,228 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line,
 } from "recharts";
 import "./styles/review_chart.scss";
 
-const data = [
-  {
-    city: "Gaziabad",
-    pincode: "430123",
-    responded: 800,
-    unresponded: 200,
-    month: "Oct 2024",
-  },
-  {
-    city: "Noida",
-    pincode: "201302",
-    responded: 850,
-    unresponded: 150,
-    month: "Oct 2024",
-  },
-  {
-    city: "Delhi",
-    pincode: "110034",
-    responded: 800,
-    unresponded: 200,
-    month: "Oct 2024",
-  },
-  {
-    city: "Nagpur",
-    pincode: "129012",
-    responded: 780,
-    unresponded: 220,
-    month: "Oct 2024",
-  },
-  {
-    city: "Lucknow",
-    pincode: "129012",
-    responded: 820,
-    unresponded: 180,
-    month: "Oct 2024",
-  },
-  {
-    city: "Indore",
-    pincode: "125001",
-    responded: 900,
-    unresponded: 100,
-    month: "Oct 2024",
-  },
-];
+const COLORS = ["#137CFC", "#B0DFFE"];
+export default function ReviewChart({ data, chartType, isHeight, respondedRef }) {
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload?.length) {
+      return (
+        <div className="overlay-text">
+          <p className="month-text">{data[0].month}</p>
+          {payload.map((entry, index) => (
+            <p
+              key={index}
+              className="percent-val-text"
+              style={{ color: entry.color }}
+            >
+              ● {entry.city} {entry.name} {entry.value}
+            </p>
+          ))}
+        </div>
+      );
+    }
 
-const CustomTooltip = ({ active, payload, label }) => {
-  if (active && payload?.length) {
-    return (
-      <div className="overlay-text">
-        <p className="month-text">{data[0].month}</p>
-        {payload.map((entry, index) => (
-          <p
-            key={index}
-            className="percent-val-text"
-            style={{ color: entry.color }}
-          >
-            ● {entry.name} {entry.value}
-          </p>
-        ))}
-      </div>
-    );
-  }
+    return null;
+  };
 
-  return null;
-};
-// const renderCustomXAxis = ({ x, y, payload }) => {
-//   const { city, pincode } = data[payload.index];
-//   return (
-//     <g transform={`translate(${x},${y + 10})`}>
-//       <text x={0} y={0} dy={10} textAnchor="middle" fill="#333" fontSize={9}>
-//         {city}
-//       </text>
-//       <text x={0} y={15} dy={10} textAnchor="middle" fill="#888" fontSize={10}>
-//         ({pincode})
-//       </text>
-//     </g>
-//   );
-// };
-
-export default function ReviewChart() {
+  const pieData = data.map((item) => ({
+    name: item.city,
+    value: item.responded - item.unresponded,
+  }));
   return (
     <div className="parent-container">
-      {/* <h2 className="text-lg font-semibold mb-2">
-        Responded & Unresponded Reviews
-      </h2> */}
-      <div className="inner-container">
-        <ResponsiveContainer width="100%" height={250}>
-          <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis
-              dataKey="period"
-              tick={({ x, y, payload, index }) => {
-                // const city = payload.value;
-                const city = data[index].city;
-                const code = data[index].pincode;
-                return (
-                  <g transform={`translate(${x},${y})`}>
-                    <text textAnchor="middle" fill="#666" fontSize={9}>
-                      <tspan x={0} dy="1em">
-                        {city}
-                      </tspan>
-                      <tspan
-                        style={{ marginTop: "3px" }}
-                        x={0}
-                        dy="1.2em"
-                        fill="#999"
-                        fontSize={6}
-                      >
-                        ({code})
-                      </tspan>
-                    </text>
-                  </g>
-                );
-              }}
-            />
-            {/* <YAxis /> */}
-            <Tooltip content={<CustomTooltip />} />
-            <Legend
-              verticalAlign="top"
-              align="center"
-              content={({ payload }) => (
-                <ul
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    gap: "16px",
-                    marginTop: "-14px",
-                    marginBottom: "10px"
-                  }}
-                >
-                  {payload.map((entry, index) => (
-                    <li
-                      key={`item-${index}`}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        fontSize: "12px",
-                        color: "#333",
-                        fontWeight: 500,
-                      }}
-                    >
-                      <span
+      <div className="inner-container" ref={respondedRef}>
+        <ResponsiveContainer width="100%" height={isHeight}>
+          {chartType?.isBarChart ? (
+            <BarChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="period"
+                tick={({ x, y, payload, index }) => {
+                  // const city = payload.value;
+                  const city = data[index].city;
+                  const code = data[index].code;
+                  return (
+                    <g transform={`translate(${x},${y})`}>
+                      <text textAnchor="middle" fill="#666" fontSize={9}>
+                        <tspan x={0} dy="1em">
+                          {city}
+                        </tspan>
+                        <tspan
+                          style={{ marginTop: "3px" }}
+                          x={0}
+                          dy="1.2em"
+                          fill="#999"
+                          fontSize={6}
+                        >
+                          ({code})
+                        </tspan>
+                      </text>
+                    </g>
+                  );
+                }}
+              />
+              {/* <YAxis /> */}
+              <Tooltip content={<CustomTooltip />} />
+              <Legend
+                verticalAlign="top"
+                align="center"
+                content={({ payload }) => (
+                  <ul
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      gap: "16px",
+                      marginTop: "-14px",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    {payload.map((entry, index) => (
+                      <li
+                        key={`item-${index}`}
                         style={{
-                          display: "inline-block",
-                          width: 10,
-                          height: 10,
-                          backgroundColor: entry.color,
-                          borderRadius: "50%",
-                          marginRight: 6,
+                          display: "flex",
+                          alignItems: "center",
+                          fontSize: "12px",
+                          color: "#333",
+                          fontWeight: 500,
                         }}
-                      ></span>
-                      {entry.value}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            />
+                      >
+                        <span
+                          style={{
+                            display: "inline-block",
+                            width: 10,
+                            height: 10,
+                            backgroundColor: entry.color,
+                            borderRadius: "50%",
+                            marginRight: 6,
+                          }}
+                        ></span>
+                        {entry.value}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              />
 
-            <Bar
-              dataKey="responded"
-              stackId="a"
-              fill="#137CFC"
-              name="Responded"
-              //   radius={[4, 4, 0, 0]}
-              barSize={10}
-            />
-            <Bar
-              dataKey="unresponded"
-              stackId="a"
-              fill="#B0DFFE"
-              name="Unresponded"
-              radius={[4, 4, 0, 0]}
-              barSize={10}
-            />
-          </BarChart>
+              <Bar
+                dataKey="responded"
+                stackId="a"
+                fill="#137CFC"
+                name="Responded"
+                //   radius={[4, 4, 0, 0]}
+                barSize={10}
+              />
+              <Bar
+                dataKey="unresponded"
+                stackId="a"
+                fill="#B0DFFE"
+                name="Unresponded"
+                radius={[4, 4, 0, 0]}
+                barSize={10}
+              />
+            </BarChart>
+          ) : (
+            ""
+          )}
+          {chartType.isLineChart ? (
+            <LineChart width={200} height={isHeight} data={data}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="period"
+                tick={({ x, y, payload, index }) => {
+                  // const city = payload.value;
+                  const city = data[index].city;
+                  const code = data[index].code;
+                  return (
+                    <g transform={`translate(${x},${y})`}>
+                      <text textAnchor="middle" fill="#666" fontSize={9}>
+                        <tspan x={0} dy="1em">
+                          {city}
+                        </tspan>
+                        <tspan
+                          style={{ marginTop: "3px" }}
+                          x={0}
+                          dy="1.2em"
+                          fill="#999"
+                          fontSize={6}
+                        >
+                          ({code})
+                        </tspan>
+                      </text>
+                    </g>
+                  );
+                }}
+              />
+              <Tooltip />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="responded"
+                stroke="#137CFC"
+                strokeWidth={2}
+                dot={{ r: 3 }}
+                name="Responded"
+              />
+              <Line
+                type="monotone"
+                dataKey="unresponded"
+                stroke="#B0DFFE"
+                strokeWidth={2}
+                dot={{ r: 3 }}
+                name="Unresponded"
+              />
+            </LineChart>
+          ) : (
+            ""
+          )}
+          {chartType?.isPieChart ? (
+            <PieChart>
+              <Pie
+                data={pieData}
+                dataKey="value" // <- 'value' = responded count
+                nameKey="name" // <- 'name' = city name
+                cx="50%"
+                cy="50%"
+                outerRadius={70}
+                // label={({ name, percent, x, y }) => (
+                //   <text
+                //     x={x}
+                //     y={y}
+                //     textAnchor="middle"
+                //     dominantBaseline="central"
+                //     style={{ fontSize: "10px" }}
+                //   >
+                //     {`${name} (${(percent * 100).toFixed(1)}%)`}
+                //   </text>
+                // )}
+                // labelLine={false}
+                // labelStyle={{ fontSize: "8px" }}
+              >
+                {pieData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend
+                wrapperStyle={{
+                  fontSize: "12px", // 👈 Reduce legend font size here
+                }}
+              />
+            </PieChart>
+          ) : (
+            ""
+          )}
         </ResponsiveContainer>
       </div>
     </div>
